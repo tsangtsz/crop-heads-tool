@@ -20,8 +20,12 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
 
     - name: Build with PyInstaller
-      run: pyinstaller --onefile --hidden-import=onnxruntime crop_heads.py
-
+      run:  |
+    pyinstaller --onefile `
+      --hidden-import=onnxruntime `
+      --add-data "$(python -c 'import cv2; print(cv2.data.haarcascades + \"haarcascade_frontalface_default.xml\")'):cv2/data" `
+      crop_heads.py
+      
     - name: Upload EXE
       uses: actions/upload-artifact@v4
       with:
